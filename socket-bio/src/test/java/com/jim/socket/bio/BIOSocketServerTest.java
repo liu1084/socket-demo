@@ -21,43 +21,38 @@ import java.util.Arrays;
  */
 public class BIOSocketServerTest {
 	private static final Logger LOG = LoggerFactory.getLogger(BIOSocketServerTest.class);
+	private static final int TIMES = 10;
 	private Socket client;
 	@Test
 	public void testSocketConnection() throws IOException {
 		client = new Socket("localhost", 8089);
 		boolean isConnected = client.isConnected();
-		Assert.assertEquals(true,isConnected);
+		Assert.assertTrue(isConnected);
 	}
 
 	@Test
 	public void testSendMessageToServer() {
 		DataOutputStream outputStream = null;
-		DataInputStream dataInputStream = null;
 		try {
 			client = new Socket("localhost", 8089);
 			byte [] messageFrame = new byte[100];
 			messageFrame[0] = 0x01; //type
-			String data = "ping";
-			messageFrame[1] = (byte) data.length(); //length
-			System.arraycopy(data.getBytes(),0,messageFrame,2, data.length());
-			outputStream = new DataOutputStream(client.getOutputStream());
-			outputStream.write(messageFrame);
-			outputStream.flush();
+			for (int i = 0; i < TIMES; i++) {
+				String data = "ping";
+				messageFrame[1] = (byte) data.length(); //length
+				System.arraycopy(data.getBytes(),0,messageFrame,2, data.length());
+				outputStream = new DataOutputStream(client.getOutputStream());
+				outputStream.write(messageFrame);
+				outputStream.flush();
 
-			LOG.debug("Response data = {}.", Arrays.toString(messageFrame));
+				LOG.debug("Response data = {}.", messageFrame);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (outputStream != null) {
 				try {
 					outputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (dataInputStream != null) {
-				try {
-					dataInputStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
