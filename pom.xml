@@ -13,7 +13,6 @@
 		<module>socket-bio</module>
 		<module>socket-nio</module>
 		<module>socket-netty</module>
-		<module>socket-utils</module>
 		<module>socket-config</module>
 	</modules>
 
