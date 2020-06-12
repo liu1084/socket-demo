@@ -65,11 +65,15 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.jim.socket</groupId>
-				<artifactId>socket-utils</artifactId>
-				<version>${socket-utils.version}</version>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>4.1.50.Final</version>
 			</dependency>
-
+			<dependency>
+				<groupId>com.github.oshi</groupId>
+				<artifactId>oshi-core</artifactId>
+				<version>LATEST</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

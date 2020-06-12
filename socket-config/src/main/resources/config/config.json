@@ -1,0 +1,5 @@
+{
+    "bindAddress": "localhost",
+    "port": "8089",
+    "maxConnection": 100
+}

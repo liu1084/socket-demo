@@ -12,12 +12,6 @@
 	<artifactId>socket-bio</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.jim.socket</groupId>
-			<artifactId>socket-utils</artifactId>
-			<version>1.0</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
