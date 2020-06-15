@@ -32,8 +32,6 @@ public class HelloServer {
 							ch.pipeline().addLast(new HelloHandler());
 						}
 					});
-			serverBootstrap.option(ChannelOption.SO_KEEPALIVE,true);
-			serverBootstrap.option(ChannelOption.SO_BACKLOG, 128);
 			JSONConfig<ServerConfig> jsonConfig =  new JSONConfig<>();
 			ServerConfig config = jsonConfig.loadConfig("config/config.json", ServerConfig.class);
 			ChannelFuture channel = serverBootstrap

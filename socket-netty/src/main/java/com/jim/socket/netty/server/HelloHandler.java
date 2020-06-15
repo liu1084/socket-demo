@@ -7,6 +7,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * @project: socket-demo
@@ -25,8 +26,9 @@ public class HelloHandler extends ChannelInboundHandlerAdapter {
 		if (msg instanceof ByteBuf) {
 			ByteBuf byteBuf = (ByteBuf) msg;
 			byte [] result = new byte[((ByteBuf) msg).readableBytes()];
+			result[0] = 0x79;
 			byteBuf.writeBytes(result);
-			log.info("Result = {}",result.toString());
+			log.info("Result = {}", Arrays.toString(result));
 			log.info("Received message = {}", ((ByteBuf) msg).toString(StandardCharsets.UTF_8));
 			ctx.writeAndFlush("bar".getBytes(StandardCharsets.UTF_8));
 		}
