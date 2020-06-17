@@ -5,11 +5,9 @@ import com.jim.socket.config.ServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
  * @project: socket-demo
@@ -18,10 +16,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @date: 2020-06-12 17:46
  * @description：TODO
  */
-public class HelloServer {
+public class NettyServer {
 	private NioEventLoopGroup boss = new NioEventLoopGroup();
 	private NioEventLoopGroup worker = new NioEventLoopGroup();
 	private ServerBootstrap serverBootstrap = new ServerBootstrap();
+
 	public void server() {
 		try {
 			serverBootstrap.group(boss, worker)
@@ -29,10 +28,13 @@ public class HelloServer {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new HelloHandler());
+							ch.pipeline().addLast("decoder", new MessageEncoderDecoder.MessageDecoder());
+							ch.pipeline().addLast("encoder", new MessageEncoderDecoder.MessageEncoder());
+							ch.pipeline().addLast("handler", new MessageInboundHandler());
+							ch.pipeline().addLast("handler2", new MessageOutboundHandler());
 						}
 					});
-			JSONConfig<ServerConfig> jsonConfig =  new JSONConfig<>();
+			JSONConfig<ServerConfig> jsonConfig = new JSONConfig<>();
 			ServerConfig config = jsonConfig.loadConfig("config/config.json", ServerConfig.class);
 			ChannelFuture channel = serverBootstrap
 					.bind(config.getBindAddress(), config.getPort())

@@ -1,6 +1,8 @@
 package com.jim.socket.netty.server;
 
+import com.jim.socket.netty.bean.Message;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,18 +21,25 @@ import java.util.Arrays;
 
 
 @Slf4j
-public class HelloHandler extends ChannelInboundHandlerAdapter {
+public class MessageInboundHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if (msg instanceof ByteBuf) {
-			ByteBuf byteBuf = (ByteBuf) msg;
-			byte [] result = new byte[((ByteBuf) msg).readableBytes()];
-			result[0] = 0x79;
-			byteBuf.writeBytes(result);
-			log.info("Result = {}", Arrays.toString(result));
-			log.info("Received message = {}", ((ByteBuf) msg).toString(StandardCharsets.UTF_8));
-			ctx.writeAndFlush("bar".getBytes(StandardCharsets.UTF_8));
+		if (msg instanceof Message) {
+			try {
+				Message message = (Message) msg;
+				// TODO
+				log.info("收到客户端发来的message消息 = {}", message);
+
+				// 业务逻辑
+				String body = message.getBody();
+
+				// 回写给客户端
+				ByteBuf response = Unpooled.wrappedBuffer(body.getBytes());
+				ctx.channel().writeAndFlush(response);
+			}catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 

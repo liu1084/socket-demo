@@ -2,6 +2,7 @@ package com.jim.socket.netty.client;
 
 import com.jim.socket.config.JSONConfig;
 import com.jim.socket.config.ServerConfig;
+import com.jim.socket.netty.server.MessageEncoderDecoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,9 +16,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @date: 2020-06-12 18:05
  * @description：TODO
  */
-public class HelloClient {
+public class NettyClient implements ISocketClient {
 	private NioEventLoopGroup worker = new NioEventLoopGroup();
 
+	@Override
 	public void run() {
 		try {
 			Bootstrap bootstrap = new Bootstrap();
@@ -29,9 +31,9 @@ public class HelloClient {
 					.handler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new FooHandler());
+							ch.pipeline().addLast("encoder", new MessageEncoderDecoder.MessageEncoder());
+							ch.pipeline().addLast(new ClientInboundHandler());
 						}
-
 					});
 			bootstrap.connect().sync();
 		} catch (InterruptedException e) {

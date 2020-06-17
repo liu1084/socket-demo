@@ -1,7 +1,8 @@
 package com.jim.socket.netty;
 
-import com.jim.socket.netty.client.HelloClient;
-import com.jim.socket.netty.server.HelloServer;
+import com.jim.socket.netty.client.ISocketClient;
+import com.jim.socket.netty.client.SocketClient;
+import com.jim.socket.netty.server.NettyServer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -17,13 +18,17 @@ public class HelloServerTest {
 
 	@Test
 	public void testStartHelloServer() throws InterruptedException {
-		HelloServer server = new HelloServer();
+		NettyServer server = new NettyServer();
 		server.server();
 	}
 
 	@Test
 	public void testClient() {
-		HelloClient client = new HelloClient();
-		client.run();
+		ISocketClient client = new SocketClient();
+		try {
+			client.run();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
