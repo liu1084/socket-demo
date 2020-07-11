@@ -23,9 +23,20 @@ public class SocketClientListener implements Runnable {
 		try {
 			InputStream in = client.getInputStream();
 			byte [] buffer = new byte[128];
-
+			int read = 0;
+			while (read != -1) {
+				read = in.read(buffer);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (client != null){
+					client.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
